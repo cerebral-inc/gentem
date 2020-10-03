@@ -10,9 +10,9 @@ require 'active_support/core_ext/hash'
 
 module Gentem
 
-  class GentemAuthError < StandardError; end
-  class GentemAccessTokenNotPresentError < StandardError; end
-  class GentemInvalidApiUrlError < StandardError; end
+  class AuthError < StandardError; end
+  class AccessTokenNotPresentError < StandardError; end
+  class InvalidApiUrlError < StandardError; end
 
   class << self
     attr_accessor :configuration
