@@ -51,6 +51,11 @@ module Gentem
       Request.new(self)
     end
 
+    def access_token
+      # prefer the instance token if there is one (though they should always be the same in general)
+      @access_token || @@access_token
+    end
+
     ##
     # OAuth domain to use (based on environment setting)
     #
@@ -71,10 +76,6 @@ module Gentem
       when :sandbox
         'integration.gentem.co'
       end
-    end
-
-    def access_token
-      @access_token || @@access_token
     end
 
     def self.fetch_access_token
