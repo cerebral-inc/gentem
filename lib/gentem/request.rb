@@ -17,7 +17,7 @@ module Gentem
     def post(path, data)
       perform_checks(path)
       url = build_url(path)
-      response = send_authenticated(__method_name__, url, data)
+      response = send_authenticated(__method__, url, data)
       Response.new(response)
     end
     alias_method :put, :post
