@@ -1,9 +1,25 @@
 RSpec.describe Gentem::Request do
+  before do
+    ::Gentem.configure do |config|
+      config.environment = :sandbox
+    end
 
-  xit "has a ping method that returns string healthy when operational" do
-    request = Gentem::Request.new
-    ping_response = request.ping
-    expect(ping_response.data).to include('healthy')
+    stub_request(:post, /oauth.gentem.co/).
+      to_return(
+        body: { access_token: 'token' }.to_json,
+        headers: { 'Content-Type' => 'application/json' }
+      )
   end
 
+  describe '.ping?' do
+    before do
+      stub_request(:get, /ntegration.gentem.co/).
+        to_return(
+          body: 'Ping OK',
+          headers: { 'Content-Type' => 'application/json' }
+        )
+    end
+
+    its(:ping?) { is_expected.to be_truthy }
+  end
 end
