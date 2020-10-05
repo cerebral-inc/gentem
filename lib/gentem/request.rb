@@ -10,16 +10,14 @@ module Gentem
     def get(path)
       perform_checks(path)
       url = build_url(path)
-      response = self.class.get(url, { headers: headers })
+      response = send_authenticated(:get, url)
       Response.new(response)
     end
 
     def post(path, data)
       perform_checks(path)
       url = build_url(path)
-      response = self.class.public_send(
-        __method_name__, url, { headers: headers, body: data.to_json }
-      )
+      response = send_authenticated(__method_name__, url, data)
       Response.new(response)
     end
     alias_method :put, :post
@@ -34,6 +32,23 @@ module Gentem
     end
 
     private
+
+    def send_authenticated(method, url, data = {})
+      response = self.class.public_send(
+        method, url, { headers: headers, body: data.to_json }
+      )
+
+      if response.code == 401
+        if response.parsed_response['message'] == 'The incoming token has expired'
+          authentication.refresh_access_token!
+          send_authenticated(method, url, data)
+        else
+          raise ::Gentem::AuthError, 'The token is invalid and cannot be refreshed'
+        end
+      else
+        response
+      end
+    end
 
     def authentication
       @authentication ||= Gentem::Authentication.new

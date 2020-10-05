@@ -32,7 +32,7 @@ module Gentem
       @access_token ||= persisted_access_token || fetch_access_token
     end
 
-    def refresh_access_token
+    def refresh_access_token!
       @access_token = fetch_access_token
     end
 
