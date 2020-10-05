@@ -1,3 +1,5 @@
+require 'active_support/core_ext/module'
+
 module Gentem
 
   class Request
@@ -24,10 +26,9 @@ module Gentem
     alias_method :patch, :post
 
     def ping?
-      self.class.get(
-        ['https://', api_domain, '/ping'].join,
-        { headers: headers }
-      ).parsed_response['healthy'].present?
+      # there is also a /ping endpoint in the root namespace
+      # and it response with "healthy"
+      get('ping').data == 'Ping OK'
     rescue
       false
     end

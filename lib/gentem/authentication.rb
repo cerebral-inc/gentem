@@ -29,7 +29,7 @@ module Gentem
     #
 
     def access_token
-      @access_token ||= persisted_token || fetch_access_token
+      @access_token ||= persisted_access_token || fetch_access_token
     end
 
     def refresh_access_token
@@ -56,16 +56,17 @@ module Gentem
 
     def fetch_access_token
       response = ::HTTParty.post(oauth_grant_url, { headers: oauth_headers })
-      new_token = response&.parsed_response&.fetch('access_token', nil)
+      new_token =
+        if response.code == 200 && response.content_type == 'application/json'
+          response&.parsed_response&.fetch('access_token', nil)
+        end
 
       if new_token.nil?
-        raise GentemAuthError, "There was a problem obtaining a Gentem access token from: #{oauth_grant_url}"
+        raise ::Gentem::AuthError, "There was a problem obtaining a Gentem access token from: #{oauth_grant_url}"
       end
 
       Gentem.configuration.persist_token&.call(new_token)
       new_token
-
-      # todo: error handling?
     end
 
     def persisted_access_token

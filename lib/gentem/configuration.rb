@@ -33,12 +33,12 @@ module Gentem
       @environment = environment.to_sym
     end
 
-    def persisted_token=(&block)
-      @persisted_token = block if block_given? && block.arity == 0
+    def persisted_token=(block)
+      @persisted_token = block if block.lambda? && block.arity == 0
     end
 
-    def persist_token=(&block)
-      @persist_token = block if block_given? && block.arity == 1
+    def persist_token=(block)
+      @persist_token = block if block.lambda? && block.arity == 1
     end
 
   end

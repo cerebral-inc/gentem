@@ -1,4 +1,7 @@
 require "bundler/setup"
+require 'rspec/its'
+require 'webmock/rspec'
+require 'byebug'
 require "gentem"
 
 RSpec.configure do |config|

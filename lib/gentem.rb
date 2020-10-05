@@ -1,8 +1,7 @@
 # order matters
-require "gentem/client"
+require "gentem/authentication"
 require "gentem/configuration"
 require "gentem/request"
-require "gentem/patients"
 require "gentem/response"
 require "gentem/version"
 
