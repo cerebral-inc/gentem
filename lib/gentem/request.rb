@@ -62,6 +62,10 @@ module Gentem
       end
     end
 
+    def build_path_with_params(path, params)
+      [path, '/?', params.to_query].join
+    end
+
     def build_url(path)
       ['https://', api_domain, '/api/', path].join
     end
