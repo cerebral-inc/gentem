@@ -9,18 +9,11 @@ module Gentem
 
   class Response
 
-    attr_reader :body
-    attr_reader :code
-    attr_reader :message
-    attr_reader :headers
-    attr_reader :parsed_response
+    attr_reader :response
+    delegate :body, :code, :message, :headers, :parsed_response, to: :response
 
     def initialize(response)
-      @body = response.body
-      @code = response.code
-      @headers = response.headers
-      @parsed_response = response.parsed_response
-      return if error?
+      @response = response
     end
 
     def success?
@@ -37,6 +30,9 @@ module Gentem
 
     def data
       parsed_response
+    rescue JSON::ParserError
+      # if the server sends an invalid response
+      body
     end
 
   end

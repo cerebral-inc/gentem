@@ -1,40 +1,69 @@
+require 'active_support/core_ext/module'
+
 module Gentem
 
   class Request
     include HTTParty
-    attr_accessor :client
 
-    def initialize(opts = {} )
-      @client = opts[:client] || Gentem::Client.new
-    end
+    delegate :access_token, to: :authentication
 
     def get(path)
       perform_checks(path)
       url = build_url(path)
-      response = self.class.get(url, { headers: headers })
+      response = send_authenticated(:get, url)
       Response.new(response)
     end
 
     def post(path, data)
       perform_checks(path)
       url = build_url(path)
-      response = self.class.post(url, { headers: headers,
-                                      body: data.to_json })
+      response = send_authenticated(__method__, url, data)
       Response.new(response)
     end
+    alias_method :put, :post
+    alias_method :patch, :post
 
-    def ping
-      get('/ping')
+    def ping?
+      # there is also a /ping endpoint in the root namespace
+      # and it response with "healthy"
+      get('ping').data == 'Ping OK'
+    rescue
+      false
     end
 
     private
 
-    def build_url(path)
-      ['https://', client.api_domain, path].join
+    def send_authenticated(method, url, data = {})
+      response = self.class.public_send(
+        method, url, { headers: headers, body: data.to_json }
+      )
+
+      if response.code == 401
+        if response.parsed_response['message'] == 'The incoming token has expired'
+          authentication.refresh_access_token!
+          send_authenticated(method, url, data)
+        else
+          raise ::Gentem::AuthError, 'The token is invalid and cannot be refreshed'
+        end
+      else
+        response
+      end
     end
 
-    def access_token
-      @client.access_token || Gentem::Client.access_token || Gentem::Client.fetch_access_token
+    def authentication
+      @authentication ||= Gentem::Authentication.new
+    end
+
+    def api_domain
+      if Gentem.configuration.production?
+        'integration.gentem.com'
+      else
+        'integration.gentem.co'
+      end
+    end
+
+    def build_url(path)
+      ['https://', api_domain, '/api/', path].join
     end
 
     def headers
@@ -43,16 +72,15 @@ module Gentem
     end
 
     def perform_checks(path)
-      if client.access_token.nil? || client.access_token.empty?
-        raise GentemAccessTokenNotPresentError, "Gentem access token not present"
+      if access_token.blank?
+        raise ::Gentem::AccessTokenNotPresentError, "Gentem access token not present"
       end
 
       # path must:
       # * not be blank
-      # * start with a "/"
       # * contain a path besides just "/"
-      if path.nil? || path.empty? || (path.slice(0,1) != '/') || path.gsub('/', '').empty?
-        raise GentemInvalidApiUrlError "Gentem path passed appears invalid: #{path}"
+      if path.blank? || path.gsub('/', '').empty?
+        raise ::Gentem::InvalidApiUrlError "Gentem path passed appears invalid: #{path}"
       end
     end
 
