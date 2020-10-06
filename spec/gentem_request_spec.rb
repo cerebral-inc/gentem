@@ -13,7 +13,7 @@ RSpec.describe Gentem::Request do
 
   describe '.ping?' do
     before do
-      stub_request(:get, /ntegration.gentem.co/).
+      stub_request(:get, /integration.gentem.co/).
         to_return(
           body: 'Ping OK',
           headers: { 'Content-Type' => 'application/json' }

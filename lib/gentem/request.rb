@@ -2,6 +2,15 @@ require 'active_support/core_ext/module'
 
 module Gentem
 
+  ##
+  # Gentem Request class
+  #
+  # Represents an authenticated request to the Gentem API.
+  #
+  # Not used directly. RestfulResource inherits from this and implements the core, common
+  # methods used by the API.
+  #
+
   class Request
     include HTTParty
 
@@ -17,7 +26,7 @@ module Gentem
     def post(path, data)
       perform_checks(path)
       url = build_url(path)
-      response = send_authenticated(__method__, url, data)
+      response = send_authenticated(__callee__, url, data)
       Response.new(response)
     end
     alias_method :put, :post
@@ -60,10 +69,6 @@ module Gentem
       else
         'integration.gentem.co'
       end
-    end
-
-    def build_path_with_params(path, params)
-      [path, '/?', params.to_query].join
     end
 
     def build_url(path)

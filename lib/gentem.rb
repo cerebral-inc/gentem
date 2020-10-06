@@ -2,7 +2,9 @@
 require "gentem/authentication"
 require "gentem/configuration"
 require "gentem/request"
+require "gentem/restful_resource"
 require "gentem/response"
+require "gentem/resources/patient"
 require "gentem/version"
 
 require 'active_support/core_ext/hash'

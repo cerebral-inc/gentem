@@ -29,7 +29,13 @@ module Gentem
     #
 
     def data
-      parsed_response
+      if parsed_response.is_a?(Hash)
+        parsed_response&.with_indifferent_access
+      elsif parsed_response.is_a?(Array)
+        parsed_response.map(&:with_indifferent_access)
+      else
+        parsed_response
+      end
     rescue JSON::ParserError
       # if the server sends an invalid response
       body
