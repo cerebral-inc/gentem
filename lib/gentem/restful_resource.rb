@@ -38,6 +38,10 @@ module Gentem
       get(resource_path(id))
     end
 
+    def destroy(id)
+      delete(resource_path(id))
+    end
+
     def update(id, data)
       put(resource_path(id), data)
     end
@@ -47,8 +51,7 @@ module Gentem
     end
 
     def resource_base
-      stripped_class = self.class.name.gsub('Gentem::', '').gsub('Resources::', '')
-      stripped_class.underscore.pluralize
+      self.class.name.demodulize.underscore.pluralize
     end
 
     def resource_path(id)
