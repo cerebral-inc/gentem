@@ -1,9 +1,5 @@
 RSpec.describe Gentem::Authentication do
-  before do
-    ::Gentem.configure do |config|
-      config.environment = :sandbox
-    end
-  end
+  include_context 'with sandbox configuration'
 
   context 'with a correct recponse' do
     let(:correct_access_token) { 'correct_token' }

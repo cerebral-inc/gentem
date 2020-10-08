@@ -1,9 +1,5 @@
 RSpec.describe Gentem::Resources::Patient do
-  before do
-    ::Gentem.configure do |config|
-      config.environment = :sandbox
-    end
-  end
+  include_context 'with sandbox configuration'
 
   context 'list patients - first result' do
     let(:params) { { page: 1, page_size: 20 } }
@@ -91,7 +87,7 @@ RSpec.describe Gentem::Resources::Patient do
       last_name: "Mcfly" }
     }
 
-    subject { Gentem::Resources::Patient.new.partial_update(id, attributes).data }
+    subject { Gentem::Resources::Patient.new.update(id, attributes).data }
 
     before do
       response_body = attributes.to_json

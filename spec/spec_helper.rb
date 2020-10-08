@@ -1,8 +1,16 @@
+require 'simplecov'
+SimpleCov.start do
+  add_filter 'spec/'
+  add_group 'Resources', 'lib/gentem/resources'
+end
+
 require "bundler/setup"
 require 'rspec/its'
 require 'webmock/rspec'
 require 'byebug'
 require "gentem"
+
+Dir['spec/support/**/*.rb'].each { |f| require f.gsub(/^spec\//, '') }
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

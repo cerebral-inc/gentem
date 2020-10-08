@@ -1,9 +1,7 @@
 RSpec.describe Gentem::Request do
-  before do
-    ::Gentem.configure do |config|
-      config.environment = :sandbox
-    end
+  include_context 'with sandbox configuration'
 
+  before do
     stub_request(:post, /oauth.gentem.co/).
       to_return(
         body: { access_token: 'token' }.to_json,

@@ -19,11 +19,12 @@ module Gentem
     def get(path)
       perform_checks(path)
       url = build_url(path)
-      response = send_authenticated(:get, url)
+      response = send_authenticated(__callee__, url)
       Response.new(response)
     end
+    alias_method :delete, :get
 
-    def post(path, data)
+    def post(path, data = {})
       perform_checks(path)
       url = build_url(path)
       response = send_authenticated(__callee__, url, data)

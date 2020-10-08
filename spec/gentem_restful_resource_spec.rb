@@ -1,9 +1,5 @@
 RSpec.describe Gentem::RestfulResource do
-  before do
-    ::Gentem.configure do |config|
-      config.environment = :sandbox
-    end
-  end
+  include_context 'with sandbox configuration'
 
   context "#resource_base" do
     it "is an underscored pluralized version of the class name" do

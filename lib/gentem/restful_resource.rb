@@ -25,7 +25,7 @@ module Gentem
 
     protected
 
-    def list(params)
+    def list(params = {})
       path = path_with_params(resource_base, params)
       get(path)
     end
@@ -38,17 +38,20 @@ module Gentem
       get(resource_path(id))
     end
 
-    def update(id, data)
+    def destroy(id)
+      delete(resource_path(id))
+    end
+
+    def replace(id, data)
       put(resource_path(id), data)
     end
 
-    def partial_update(id, data)
+    def update(id, data)
       patch(resource_path(id), data)
     end
 
     def resource_base
-      stripped_class = self.class.name.gsub('Gentem::', '').gsub('Resources::', '')
-      stripped_class.underscore.pluralize
+      self.class.name.demodulize.underscore.pluralize
     end
 
     def resource_path(id)

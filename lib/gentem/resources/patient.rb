@@ -1,7 +1,7 @@
 module Gentem
   module Resources
     class Patient < RestfulResource
-      public :list, :create, :read, :update, :partial_update
+      public :list, :create, :read, :replace, :update
     end
   end
 end
