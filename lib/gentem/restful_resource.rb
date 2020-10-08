@@ -42,11 +42,11 @@ module Gentem
       delete(resource_path(id))
     end
 
-    def update(id, data)
+    def replace(id, data)
       put(resource_path(id), data)
     end
 
-    def partial_update(id, data)
+    def update(id, data)
       patch(resource_path(id), data)
     end
 
