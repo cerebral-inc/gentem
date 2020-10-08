@@ -4,8 +4,9 @@ require "gentem/configuration"
 require "gentem/request"
 require "gentem/restful_resource"
 require "gentem/response"
-require "gentem/resources/patient"
 require "gentem/version"
+
+Dir['lib/gentem/resources/*.rb'].each { |f| require f.gsub(/^lib\//, '') }
 
 require 'active_support/core_ext/hash'
 

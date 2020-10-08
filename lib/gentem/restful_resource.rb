@@ -25,7 +25,7 @@ module Gentem
 
     protected
 
-    def list(params)
+    def list(params = {})
       path = path_with_params(resource_base, params)
       get(path)
     end
