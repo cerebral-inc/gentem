@@ -1,4 +1,4 @@
-RSpec.shared_examples_for 'a read action' do
+RSpec.shared_examples_for 'an update action' do
   let(:attributes) do
     {
       id: "some_id",
@@ -6,14 +6,17 @@ RSpec.shared_examples_for 'a read action' do
     }
   end
 
-  subject(:response) { described_class.new.read(attributes[:id]) }
+  subject(:response) do
+    described_class.new.update(attributes[:id], attributes)
+  end
 
   before do
     request_path = Regexp.new(
       Regexp.escape("api/#{resource_base_path}/#{attributes[:id]}")
     )
 
-    stub_request(:get, request_path).
+    stub_request(:patch, request_path).
+      with(body: attributes).
       to_return(
         body: attributes.to_json,
         headers: { 'Content-Type' => 'application/json' }

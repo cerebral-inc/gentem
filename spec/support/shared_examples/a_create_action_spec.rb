@@ -14,11 +14,12 @@ RSpec.shared_examples_for 'a create action' do
     stub_request(:post, request_path).
       with(body: attributes).
       to_return(
+        status: 201,
         body: response_body,
         headers: { 'Content-Type' => 'application/json' }
       )
   end
 
-  its(:code) { is_expected.to eq(200) }
+  its(:code) { is_expected.to eq(201) }
   its(:data) { is_expected.to include(attributes) }
 end

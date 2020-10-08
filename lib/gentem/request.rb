@@ -24,7 +24,7 @@ module Gentem
     end
     alias_method :delete, :get
 
-    def post(path, data)
+    def post(path, data = {})
       perform_checks(path)
       url = build_url(path)
       response = send_authenticated(__callee__, url, data)
