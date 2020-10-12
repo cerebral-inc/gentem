@@ -30,6 +30,24 @@ module Gentem
       get(path)
     end
 
+    # return the list of records from all pages, not the actual response
+    def list_all(params = {})
+      params_with_pagination =
+        params.
+        delete_if { |k, v| k.to_s.start_with?('page') }. # delete all previous pagination params
+        merge(page_size: 1000) # set the maximum page size
+
+      first_oage = get(params_with_pagination)
+
+      results = first_page['results']
+      (first_page['count'].to_i / 1000).times do |offset|
+        page_data = get(params_with_pagination.merge(page: offest + 2))
+        results += page_data['results']
+      end
+
+      results
+    end
+
     def create(data)
       post(resource_base, data)
     end
