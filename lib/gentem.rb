@@ -6,7 +6,7 @@ require "gentem/restful_resource"
 require "gentem/response"
 require "gentem/version"
 
-Dir['lib/gentem/resources/*.rb'].each { |f| require f.gsub(/^lib\//, '') }
+Dir['lib/gentem/resources/*.rb'].each { |f| require f[/^lib\/(.+)\.rb$/, 1] }
 
 require 'active_support/core_ext/hash'
 
