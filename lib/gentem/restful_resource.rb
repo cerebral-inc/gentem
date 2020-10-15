@@ -37,7 +37,7 @@ module Gentem
         delete_if { |k, v| k.to_s.start_with?('page') }. # delete all previous pagination params
         merge(page_size: 1000) # set the maximum page size
 
-      first_oage = list(params_with_pagination)
+      first_page = list(params_with_pagination)
 
       results = first_page['results']
       (first_page['count'].to_i / 1000).times do |offset|
