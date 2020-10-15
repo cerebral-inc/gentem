@@ -90,7 +90,7 @@ module Gentem
       # * not be blank
       # * contain a path besides just "/"
       if path.blank? || path.gsub('/', '').empty?
-        raise ::Gentem::InvalidApiUrlError "Gentem path passed appears invalid: #{path}"
+        raise ::Gentem::InvalidApiUrlError "Gentem API path passed appears invalid: #{path}"
       end
     end
 
