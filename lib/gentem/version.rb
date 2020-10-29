@@ -1,3 +1,3 @@
 module Gentem
-  VERSION = "1.0.1"
+  VERSION = "1.3.2"
 end
