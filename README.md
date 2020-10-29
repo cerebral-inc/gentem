@@ -28,18 +28,16 @@ In a rails app, this might go in `config/initializers/gentem.rb` for example.
 
 ```ruby
 Gentem.configure do |config|
-  config.environment = :sandbox
-  config.client_id = 'YOUR-CLIENT-ID'
-  config.client_secret = 'YOUR-CLIENT-SECRET'
+  config.environment = Rails.env.production? ? :production : :sandbox
+  config.client_id = ENV['GENTEM_CLIENT_ID']
+  config.client_secret = ENV['GENTEM_CLIENT_SECRET']
+  config.persist_token = lambda do |value|
+    Rails.cache.write("gentem_access_token", value)
+  end
+  config.persisted_token = lambda do
+    Rails.cache.read("gentem_access_token")
+  end
 end
-```
-
-Instantiate a new Gentem::Client object and obtain an access token:
-
-```ruby
-client = Gentem::Client.new
-access_token = client.get_access_token
-puts client.access_token
 ```
 
 Access tokens are valid for 3600 seconds (60 minutes) as of this writing. You will need to obtain a new access token if the previous one has expired.
@@ -47,8 +45,8 @@ Access tokens are valid for 3600 seconds (60 minutes) as of this writing. You wi
 Test the API by hitting the /ping endpoint (continued from above example):
 
 ```ruby
-client.request.ping
-# => "pong"
+Gentem::Request.new.ping?
+# => true
 ```
 
 ## Contributing
