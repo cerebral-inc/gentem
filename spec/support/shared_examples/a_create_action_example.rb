@@ -3,13 +3,7 @@ RSpec.shared_examples_for 'a create action' do
     { field: 'value' }
   end
 
-  arguments = described_class.instance_method(:initialize).arity
-
-  if arguments.zero?
-    subject(:response) { described_class.new.create(attributes) }
-  else
-    subject(:response) { described_class.new(*(1..arguments).to_a).create(attributes) }
-  end
+  subject(:response) { described_class.new.create(attributes) }
 
   before do
     response_body = attributes.merge(id: 'some_id').to_json
