@@ -25,10 +25,10 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bundle exec rspec
-    - uses: act10ns/slack@v1
-      with:
-        status: ${{ job.status }}
-        steps: ${{ toJson(steps) }}
+    - name: Slack Notification
+      uses: lazy-actions/slatify@master
       if: always()
-      env:
-        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
+      with:
+        type: ${{ job.status }}
+        job_name: '*Gentem Specs*'
+        url: ${{ secrets.SLACK_WEBHOOK }}
