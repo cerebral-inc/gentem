@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: act10ns/slack@v1
+      with:
+        status: starting
+      if: always()
     - uses: actions/checkout@v2
     - name: Set up Ruby
     # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
@@ -27,3 +31,8 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bundle exec rspec
+    - uses: act10ns/slack@v1
+      with:
+        status: ${{ job.status }}
+        steps: ${{ toJson(steps) }}
+      if: always()
