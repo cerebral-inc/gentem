@@ -13,6 +13,7 @@ module Gentem
 
   class Request
     include HTTParty
+    debug_output
 
     delegate :access_token, to: :authentication
 
@@ -44,8 +45,17 @@ module Gentem
     private
 
     def send_authenticated(method, url, data = {})
+      options = if data[:multipart]
+        { headers: headers(data), 
+          body: data, # don't covert to json here for multipart because it messes with files.
+          multipart: true }
+      else
+        { headers: headers(data), 
+          body: data.to_json }
+      end
+
       response = self.class.public_send(
-        method, url, { headers: headers, body: data.to_json }
+        method, url, options
       )
 
       if response.code == 401
@@ -76,9 +86,13 @@ module Gentem
       ['https://', api_domain, '/api/', path].join
     end
 
-    def headers
+    JSON_CONTENT_TYPE = 'application/json'
+    MULTIPART_CONTENT_TYPE = 'multipart/form-data'
+
+    def headers(data = {})
+      content_type = data[:multipart] ? MULTIPART_CONTENT_TYPE : JSON_CONTENT_TYPE
       { Authorization: access_token,
-        'Content-Type': 'application/json' }
+        'Content-Type': content_type }
     end
 
     def perform_checks(path)
