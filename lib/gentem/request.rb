@@ -13,6 +13,7 @@ module Gentem
 
   class Request
     include HTTParty
+    debug_output
 
     delegate :access_token, to: :authentication
 
@@ -44,8 +45,11 @@ module Gentem
     private
 
     def send_authenticated(method, url, data = {})
+      request_attrs = { headers: headers(data), body: data.to_json }
+      request_attrs[:multipart] = data[:multipart] if data[:multipart]
+
       response = self.class.public_send(
-        method, url, { headers: headers(data), body: data.to_json }
+        method, url, request_attrs
       )
 
       if response.code == 401
