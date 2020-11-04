@@ -12,7 +12,7 @@ module Gentem
       def create(file)
         raise FileError.new('Must include an file to create a document') unless file
         raise FileError.new('File must be a file to creaate a document') unless file.respond_to?(:path) && file.respond_to?(:read)
-        raise 'i fail...'
+
         post(resource_base, { document: file, multipart: true })
       end
 
