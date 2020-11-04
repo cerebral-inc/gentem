@@ -23,12 +23,6 @@ module Gentem
       def resource_base
         "appointments/#{appointment_id}/documents/"
       end
-      
-      
-      private
-      def appointment_document_url(appointment_id)
-        "#{resource_path(appointment_id)}/documents/"
-      end
     end
   end
 end
