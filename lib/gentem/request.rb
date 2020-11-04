@@ -55,7 +55,7 @@ module Gentem
       end
 
       response = self.class.public_send(
-        method, url, request_attrs
+        method, url, options
       )
 
       if response.code == 401
