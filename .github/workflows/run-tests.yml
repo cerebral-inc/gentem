@@ -19,6 +19,8 @@ jobs:
       with:
         status: starting
       if: always()
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
     - uses: actions/checkout@v2
     - name: Set up Ruby
     # To automatically get bug fixes and new Ruby versions for ruby/setup-ruby,
@@ -36,3 +38,5 @@ jobs:
         status: ${{ job.status }}
         steps: ${{ toJson(steps) }}
       if: always()
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
