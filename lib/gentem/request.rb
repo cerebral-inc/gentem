@@ -45,8 +45,14 @@ module Gentem
     private
 
     def send_authenticated(method, url, data = {})
-      request_attrs = { headers: headers(data), body: data.to_json }
-      request_attrs[:multipart] = data[:multipart] if data[:multipart]
+      options = if data[:multipart]
+        { headers: headers(data), 
+          body: data, # don't covert to json here for multipart because it messes with files.
+          multipart: true }
+      else
+        { headers: headers(data), 
+          body: data.to_json }
+      end
 
       response = self.class.public_send(
         method, url, request_attrs
