@@ -45,7 +45,7 @@ module Gentem
 
     def send_authenticated(method, url, data = {})
       response = self.class.public_send(
-        method, url, { headers: headers, body: data.to_json }
+        method, url, { headers: headers(data), body: data.to_json }
       )
 
       if response.code == 401
@@ -76,9 +76,13 @@ module Gentem
       ['https://', api_domain, '/api/', path].join
     end
 
-    def headers
+    JSON_CONTENT_TYPE = 'application/json'
+    MULTIPART_CONTENT_TYPE = 'multipart/form-data'
+
+    def headers(data = {})
+      content_type = data[:multipart] ? MULTIPART_CONTENT_TYPE : JSON_CONTENT_TYPE
       { Authorization: access_token,
-        'Content-Type': 'application/json' }
+        'Content-Type': content_type }
     end
 
     def perform_checks(path)

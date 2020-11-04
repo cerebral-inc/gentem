@@ -17,7 +17,7 @@ RSpec.describe Gentem::Resources::Document do
       stub_request(:post, %r{/api\/appointments\/#{appointment_id}\/documents/}).
         to_return(
           body: response_body,
-          headers: { 'Content-Type' => 'application/json' }
+          headers: { 'Content-Type' => 'multipart/form-data' }
         )
     end
 
