@@ -26,10 +26,19 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bundle exec rspec
-    - name: Slack Notification
-      uses: lazy-actions/slatify@master
-      if: always()
+    - uses: 8398a7/action-slack@v3
       with:
-        type: ${{ job.status }}
-        job_name: '*Gentem Specs*'
-        url: ${{ secrets.SLACK_WEBHOOK }}
+        status: ${{ job.status }}
+        if: always()
+        fields: workflow,job,commit,repo,ref,author,took
+        custom_payload: |
+          {
+            username: 'build-bot',
+            icon_emoji: ':octocat:',
+            attachments: [{
+              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              text: `(${process.env.AS_COMMIT}) of ${process.env.AS_REPO}@${process.env.AS_REF.replace('refs/head/', '')} by ${process.env.AS_AUTHOR} succeeded in ${process.env.AS_TOOK}`,
+            }]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
