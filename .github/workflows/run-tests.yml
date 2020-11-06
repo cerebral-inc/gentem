@@ -30,14 +30,14 @@ jobs:
       with:
         status: custom
         if: always()
-        fields: workflow,job,commit,repo,ref,author,took
+        fields: job,commit,repo,ref,author,took,message
         custom_payload: |
           {
             username: 'build-bot',
             icon_emoji: ':octocat:',
             attachments: [{
               color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-              text: `${process.env.AS_MESSAGE} (${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR} succeeded in ${process.env.AS_TOOK} \n${process.env.AS_REPO}@${process.env.AS_REF.replace('refs/head/', '')}`,
+              text: `${process.env.AS_MESSAGE} (${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR} succeeded in ${process.env.AS_TOOK} \n${process.env.AS_REPO}@${process.env.AS_REF.replace('refs/heads/', '')}`,
             }]
           }
       env:
