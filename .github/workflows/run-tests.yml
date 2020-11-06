@@ -37,7 +37,7 @@ jobs:
             icon_emoji: ':octocat:',
             attachments: [{
               color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
-              text: `${process.env.AS_MESSAGE} (${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR.replace(/\<.+\>/, '')} succeeded in ${process.env.AS_TOOK} \n${process.env.AS_REPO}@${process.env.AS_REF.replace('refs/heads/', '')}`,
+              text: `${process.env.AS_MESSAGE} (${process.env.AS_COMMIT}) by ${process.env.AS_AUTHOR.replace(/\<.+\>/, '')} succeeded in ${process.env.AS_TOOK} \n${process.env.AS_REPO}@<${process.env.AS_REPO}/${process.env.AS_REF.replace('refs/heads/', '')}|${process.env.AS_REF.replace('refs/heads/', '')}>`,
             }]
           }
       env:
