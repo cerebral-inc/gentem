@@ -1,4 +1,6 @@
 RSpec.shared_examples_for 'a replace action' do
+  include_context 'with authentication'
+
   let(:attributes) do
     {
       id: "some_id",
@@ -7,7 +9,7 @@ RSpec.shared_examples_for 'a replace action' do
   end
 
   subject(:response) do
-    described_class.new.replace(attributes[:id], attributes)
+    described_class.new(*arguments).replace(attributes[:id], attributes)
   end
 
   before do

@@ -1,4 +1,6 @@
 RSpec.shared_examples_for 'an update action' do
+  include_context 'with authentication'
+
   let(:attributes) do
     {
       id: "some_id",
@@ -7,7 +9,7 @@ RSpec.shared_examples_for 'an update action' do
   end
 
   subject(:response) do
-    described_class.new.update(attributes[:id], attributes)
+    described_class.new(*arguments).update(attributes[:id], attributes)
   end
 
   before do

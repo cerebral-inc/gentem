@@ -1,4 +1,6 @@
 RSpec.shared_examples_for 'a list action' do
+  include_context 'with authentication'
+
   let(:attributes) do
     {
       id: "some_id",
@@ -6,7 +8,7 @@ RSpec.shared_examples_for 'a list action' do
     }
   end
 
-  subject(:response) { described_class.new.list }
+  subject(:response) { described_class.new(*arguments).list }
 
   before do
     response_body = {
