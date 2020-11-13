@@ -26,10 +26,17 @@ jobs:
       run: bundle install
     - name: Run tests
       run: bundle exec rspec
-    - name: Slack Notification
-      uses: lazy-actions/slatify@master
-      if: always()
+    - uses: 8398a7/action-slack@v3
       with:
-        type: ${{ job.status }}
-        job_name: '*Gentem Specs*'
-        url: ${{ secrets.SLACK_WEBHOOK }}
+        status: custom
+        if: always()
+        fields: job,commit,repo,ref,author,took,message
+        custom_payload: |
+          {
+            attachments: [{
+              color: '${{ job.status }}' === 'success' ? 'good' : '${{ job.status }}' === 'failure' ? 'danger' : 'warning',
+              text: `${process.env.AS_MESSAGE} by ${process.env.AS_AUTHOR.replace(/\<.+\>/, '')} succeeded in ${process.env.AS_TOOK} \n${process.env.AS_REPO}@<https://github.com/cerebral-inc/gentem/tree/${process.env.AS_REF.replace('refs/heads/', '')}|${process.env.AS_REF.replace('refs/heads/', '')}>`,
+            }]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
