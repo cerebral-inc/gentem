@@ -1,7 +1,9 @@
 RSpec.shared_examples_for 'a destroy action' do
+  include_context 'with authentication'
+
   let(:entity_id) { 'some_id' }
 
-  subject(:response) { described_class.new.destroy(entity_id) }
+  subject(:response) { described_class.new(*arguments).destroy(entity_id) }
 
   before do
     request_path = Regexp.new(

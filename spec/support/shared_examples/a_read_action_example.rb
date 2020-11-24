@@ -1,4 +1,6 @@
 RSpec.shared_examples_for 'a read action' do
+  include_context 'with authentication'
+
   let(:attributes) do
     {
       id: "some_id",
@@ -6,7 +8,7 @@ RSpec.shared_examples_for 'a read action' do
     }
   end
 
-  subject(:response) { described_class.new.read(attributes[:id]) }
+  subject(:response) { described_class.new(*arguments).read(attributes[:id]) }
 
   before do
     request_path = Regexp.new(
