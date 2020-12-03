@@ -41,7 +41,7 @@ module Gentem
 
       results = first_page['results']
       (first_page['count'].to_i / 1000).times do |offset|
-        page_data = list(params_with_pagination.merge(page: offest + 2)).data
+        page_data = list(params_with_pagination.merge(page: offset + 2)).data
         results += page_data['results']
       end
 
