@@ -1,7 +1,7 @@
 module Gentem
   module Resources
     class IcdCode < RestfulResource
-      public :list
+      public :list, :list_all
     end
   end
 end
